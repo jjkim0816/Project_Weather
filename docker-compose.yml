@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: zerobase-wifi
+    ports:
+      - 23306:3306
+    volumes:
+      - /Users/Shared/data/mariadb/conf.d:/etc/mysql/conf.d
+      - /Users/Shared/data/mariadb/data:/var/lib/mysql
+      - /Users/Shared/data/mariadb/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    networks:
+      - backend
+    restart: always
+networks:
+  backend:
+    driver: bridge
