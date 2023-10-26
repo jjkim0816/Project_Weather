@@ -33,7 +33,7 @@ class DiaryServiceTest {
 	private DiaryService diaryService;
 	
 	@Test
-	@DisplayName("날씨 일기 - 일기 생성 성공")
+	@DisplayName("날씨 일기 - 날씨 일기 생성")
 	void weatherDiary_success() {
 		// given
 		Diary diary = Diary.builder()
@@ -53,7 +53,7 @@ class DiaryServiceTest {
 	}
 	
 	@Test
-	@DisplayName("날씨 일기 - 해당 날짜 일기 목록 조회")
+	@DisplayName("날씨 일기 - 해당 날짜 날씨 일기 목록 조회")
 	void weatherDiary_listByDate() {
 		// given
 		given(diaryRepository.findAllByDate(any()))

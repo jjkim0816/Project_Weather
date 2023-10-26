@@ -33,7 +33,7 @@ class DiaryControllerTest {
 	private MockMvc mockMvc;
 	
 	@Test
-	@DisplayName("날씨 일기 저장하기")
+	@DisplayName("날씨 일기 생성 성공")
 	void successCreateDiary() throws Exception {
 		// given
 		given(diaryService.createDiary(any(), anyString()))
@@ -55,7 +55,7 @@ class DiaryControllerTest {
 	}
 	
 	@Test
-	@DisplayName("해당 날짜 날씨 일기 목록 조회")
+	@DisplayName("해당 날짜 날씨 일기 목록 조회 성공")
 	void successGetWeatherDiaryByDate() throws Exception {
 		// given
 		given(diaryService.findDiary(any()))
