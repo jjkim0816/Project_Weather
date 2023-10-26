@@ -83,4 +83,39 @@ class DiaryControllerTest {
 		.andExpect(jsonPath("$[0].temperature").value(293.52))
 		;
 	}
+	
+	@Test
+	@DisplayName("날짜 구간에 따른 날씨 일기 목록 조회 성공")
+	void successGetWeatherDiaryBetweenDate() throws Exception {
+		// given
+		given(diaryService.findDiaries(any(), any()))
+			.willReturn(Arrays.asList(
+				DiaryDto.builder()
+					.date(LocalDate.parse("2023-06-01"))
+					.weather("Clear")
+					.icon("01d")
+					.temperature(293.52)
+					.text("I want to learn spring boot")
+					.build(),
+				DiaryDto.builder()
+					.date(LocalDate.parse("2023-06-10"))
+					.weather("Clouds")
+					.icon("04d")
+					.temperature(291.61)
+					.text("I want to learn spring boot12313123123123")
+					.build()
+			))
+		;
+		// when
+		// then
+		mockMvc.perform(
+			get("/read/diaries?startDate=" + LocalDate.now() + "&endDate=" + LocalDate.now())
+		)
+		.andDo(print())
+		.andExpect(jsonPath("$[0].date").value("2023-06-01"))
+		.andExpect(jsonPath("$[0].weather").value("Clear"))
+		.andExpect(jsonPath("$[0].icon").value("01d"))
+		.andExpect(jsonPath("$[0].temperature").value(293.52))
+		;
+	}
 }

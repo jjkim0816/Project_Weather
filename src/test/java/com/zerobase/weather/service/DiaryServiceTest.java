@@ -78,9 +78,51 @@ class DiaryServiceTest {
 
 		// then
 		assertEquals(2, diaryDto.size());
+
 		assertEquals("Clear", diaryDto.get(0).getWeather());
 		assertEquals("01d", diaryDto.get(0).getIcon());
 		assertEquals(293.52, diaryDto.get(0).getTemperature());
+
+		assertEquals("Clouds", diaryDto.get(1).getWeather());
+		assertEquals("04d", diaryDto.get(1).getIcon());
+		assertEquals(291.61, diaryDto.get(1).getTemperature());
+	}
+
+	@Test
+	@DisplayName("날씨 일기 - 날짜 구간에 따른 날씨 일기 목록 조회")
+	void weatherDiary_listBetweenDate() {
+		// given
+		given(diaryRepository.findAllByDateBetween(any(), any()))
+			.willReturn(Arrays.asList(
+				Diary.builder()
+					.date(LocalDate.parse("2023-06-01"))
+					.weather("Clear")
+					.icon("01d")
+					.temperature(293.52)
+					.text("I want to learn spring boot")
+					.build(),
+				Diary.builder()
+					.date(LocalDate.parse("2023-06-10"))
+					.weather("Clouds")
+					.icon("04d")
+					.temperature(291.61)
+					.text("I want to learn spring boot12313123123123")
+					.build()
+			))
+		;
+
+		// when
+		List<DiaryDto> diaryDto = diaryService.findDiaries(LocalDate.now(), LocalDate.now());
+
+		// then
+		assertEquals(2, diaryDto.size());
+
+		assertEquals(LocalDate.parse("2023-06-01"), diaryDto.get(0).getDate());
+		assertEquals("Clear", diaryDto.get(0).getWeather());
+		assertEquals("01d", diaryDto.get(0).getIcon());
+		assertEquals(293.52, diaryDto.get(0).getTemperature());
+
+		assertEquals(LocalDate.parse("2023-06-10"), diaryDto.get(1).getDate());
 		assertEquals("Clouds", diaryDto.get(1).getWeather());
 		assertEquals("04d", diaryDto.get(1).getIcon());
 		assertEquals(291.61, diaryDto.get(1).getTemperature());
