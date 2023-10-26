@@ -2,7 +2,7 @@
 실전 날씨 일기 프로젝트
 
 # 기술 스택
-- java 11
+- Java 11
 - Spring Boot v2.7.17
 - MariaDB 11.1.2
 - JPA
