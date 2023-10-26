@@ -52,8 +52,23 @@ public class DiaryController {
 	}
 	
 	@GetMapping("/read/diaries")
-	public List<GetDiary> readDiaries() {
-		return null;
+	public List<GetDiary> readDiaries(
+		@RequestParam @DateTimeFormat(iso = ISO.DATE)
+			LocalDate startDate,
+		@RequestParam @DateTimeFormat(iso = ISO.DATE)
+			LocalDate endDate
+	) {
+		return diaryService.findDiaries(startDate, endDate)
+				.stream()
+				.map(diaryDto -> GetDiary.builder()
+						.id(diaryDto.getId())
+						.weather(diaryDto.getWeather())
+						.icon(diaryDto.getIcon())
+						.temperature(diaryDto.getTemperature())
+						.text(diaryDto.getText())
+						.date(diaryDto.getDate())
+						.build())
+				.collect(Collectors.toList());
 	}
 	
 	@PutMapping("/update/diary")

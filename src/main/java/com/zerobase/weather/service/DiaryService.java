@@ -37,6 +37,15 @@ public class DiaryService {
 	}
 
 	@Transactional
+	public List<DiaryDto> findDiaries(LocalDate startDate, LocalDate endDate) {
+		List <Diary> diaries = diaryRepository.findAllByDateBetween(startDate, endDate);
+
+		return diaries.stream()
+				.map(DiaryDto::fromEntity)
+				.collect(Collectors.toList());
+	}
+
+	@Transactional
 	public DiaryDto createDiary(LocalDate date, String text) {
 		Diary diary = OpenWeather.getWeatherDateFromApi(region, apiKey);
 		diary.setDate(date);
