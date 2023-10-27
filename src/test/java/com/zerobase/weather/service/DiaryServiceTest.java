@@ -3,14 +3,18 @@ package com.zerobase.weather.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -126,5 +130,35 @@ class DiaryServiceTest {
 		assertEquals("Clouds", diaryDto.get(1).getWeather());
 		assertEquals("04d", diaryDto.get(1).getIcon());
 		assertEquals(291.61, diaryDto.get(1).getTemperature());
+	}
+	
+	@Test
+	@DisplayName("날씨 일기 - 해당 날짜 날씨 일기 수정")
+	void weatherDiary_modifyByDate() {
+		// given
+		given(diaryRepository.findFirstByDate(any()))
+			.willReturn(Diary.builder()
+					.id(1L)
+					.date(LocalDate.parse("2023-10-25"))
+					.text("test weather update")
+					.build())
+		;
+		
+		given(diaryRepository.save(any()))
+			.willReturn(Diary.builder()
+					.date(LocalDate.parse("2023-10-25"))
+					.text("112 잘 되니?")
+					.build())
+		;
+		
+		ArgumentCaptor<Diary> captor = ArgumentCaptor.forClass(Diary.class);
+
+		// when
+		diaryService.modifyDiary(LocalDate.parse("2023-10-25"), "112 잘 되니?");
+
+		// then
+		verify(diaryRepository, times(1)).save(captor.capture());
+		assertEquals(LocalDate.parse("2023-10-25"), captor.getValue().getDate());
+		assertEquals("112 잘 되니?", captor.getValue().getText());
 	}
 }

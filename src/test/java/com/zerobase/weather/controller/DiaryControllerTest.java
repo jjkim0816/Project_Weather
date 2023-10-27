@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -116,6 +117,26 @@ class DiaryControllerTest {
 		.andExpect(jsonPath("$[0].weather").value("Clear"))
 		.andExpect(jsonPath("$[0].icon").value("01d"))
 		.andExpect(jsonPath("$[0].temperature").value(293.52))
+		;
+	}
+	
+	@Test
+	@DisplayName("해당 날짜 날씨 일기 수정 성공")
+	void successModifyWeatherDiaryByDate() throws Exception {
+		// given
+		given(diaryService.modifyDiary(any(), anyString()))
+			.willReturn(DiaryDto.builder()
+					.date(LocalDate.parse("2023-10-25"))
+					.text("11월 잘 되니??")
+					.build())
+		;
+		// when
+		// then
+		mockMvc.perform(put("/update/diary?date=2023-10-25")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("11월 잘 되니??"))
+		.andDo(print())
+		.andExpect(status().isOk())
 		;
 	}
 }
