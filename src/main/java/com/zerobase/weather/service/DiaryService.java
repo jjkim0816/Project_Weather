@@ -59,4 +59,9 @@ public class DiaryService {
 		diary.setText(text);
 		return DiaryDto.fromEntity(diaryRepository.save(diary));
 	}
+
+	@Transactional
+	public Integer deleteDiary(LocalDate date) {
+		return diaryRepository.deleteAllByDate(date);
+	}
 }

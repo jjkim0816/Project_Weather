@@ -2,7 +2,6 @@ package com.zerobase.weather.repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +15,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
 	Diary findFirstByDate(LocalDate date);
 
 	List<Diary> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
+
+	Integer deleteAllByDate(LocalDate date);
 }
