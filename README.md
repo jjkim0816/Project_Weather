@@ -40,7 +40,7 @@
   - param: startDate, endDate 를 LocalDate (yyyy-MM-dd)
   - response : 해당 기간의 일기를 List 형식으로 반환
   
-- [ ] PUT /update/diary
+- [X] PUT /update/diary
   - param : date 를 LocalDate(yyyy-MM-dd)
   - body : text
   - 해당 날짜의 첫번째 일기 글을 새로 받아온 일기글로 수정
