@@ -3,6 +3,7 @@ package com.zerobase.weather.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -135,6 +136,22 @@ class DiaryControllerTest {
 		mockMvc.perform(put("/update/diary?date=2023-10-25")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("11월 잘 되니??"))
+		.andDo(print())
+		.andExpect(status().isOk())
+		;
+	}
+	
+	@Test
+	@DisplayName("해당 날짜 모든 날씨 일기 삭제 성공")
+	void successDeleteWeatherDiaryByDate() throws Exception {
+		// given
+		given(diaryService.deleteDiary(any()))
+			.willReturn(2)
+		;
+
+		// when
+		// then
+		mockMvc.perform(delete("/delete/diary?date=" + LocalDate.now()))
 		.andDo(print())
 		.andExpect(status().isOk())
 		;

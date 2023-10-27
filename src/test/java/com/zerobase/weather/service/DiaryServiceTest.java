@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -160,5 +159,19 @@ class DiaryServiceTest {
 		verify(diaryRepository, times(1)).save(captor.capture());
 		assertEquals(LocalDate.parse("2023-10-25"), captor.getValue().getDate());
 		assertEquals("112 잘 되니?", captor.getValue().getText());
+	}
+	
+	@Test
+	@DisplayName("날씨 일기 - 해당 날짜 모든 날씨 일기 삭제")
+	void weatherDiary_deleteAllByDate() {
+		// given
+		given(diaryRepository.deleteAllByDate(any()))
+		.willReturn(1);
+
+		// when
+		Integer deleteRowCount = diaryService.deleteDiary(LocalDate.now());
+
+		// then
+		assertEquals(1, deleteRowCount);
 	}
 }
