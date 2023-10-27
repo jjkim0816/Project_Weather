@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.zerobase.weather.domain.Diary;
+import com.zerobase.weather.domain.DiaryDao;
 import com.zerobase.weather.dto.DiaryDto;
 import com.zerobase.weather.repository.DiaryRepository;
 import com.zerobase.weather.utils.OpenWeather;
@@ -39,7 +39,7 @@ class DiaryServiceTest {
 	@DisplayName("날씨 일기 - 날씨 일기 생성")
 	void weatherDiary_success() {
 		// given
-		Diary diary = Diary.builder()
+		DiaryDao diary = DiaryDao.builder()
 				.weather("Clouds")
 				.icon("04n")
 				.temperature(289.16)
@@ -49,7 +49,7 @@ class DiaryServiceTest {
 		
 
 		// when
-		Diary result = diaryRepository.save(diary);
+		DiaryDao result = diaryRepository.save(diary);
 
 		// then
 		assertNull(result);
@@ -61,13 +61,13 @@ class DiaryServiceTest {
 		// given
 		given(diaryRepository.findAllByDate(any()))
 			.willReturn(Arrays.asList(
-				Diary.builder()
+				DiaryDao.builder()
 					.weather("Clear")
 					.icon("01d")
 					.temperature(293.52)
 					.text("I want to learn spring boot")
 					.build(),
-				Diary.builder()
+				DiaryDao.builder()
 					.weather("Clouds")
 					.icon("04d")
 					.temperature(291.61)
@@ -97,14 +97,14 @@ class DiaryServiceTest {
 		// given
 		given(diaryRepository.findAllByDateBetween(any(), any()))
 			.willReturn(Arrays.asList(
-				Diary.builder()
+				DiaryDao.builder()
 					.date(LocalDate.parse("2023-06-01"))
 					.weather("Clear")
 					.icon("01d")
 					.temperature(293.52)
 					.text("I want to learn spring boot")
 					.build(),
-				Diary.builder()
+				DiaryDao.builder()
 					.date(LocalDate.parse("2023-06-10"))
 					.weather("Clouds")
 					.icon("04d")
@@ -136,7 +136,7 @@ class DiaryServiceTest {
 	void weatherDiary_modifyByDate() {
 		// given
 		given(diaryRepository.findFirstByDate(any()))
-			.willReturn(Diary.builder()
+			.willReturn(DiaryDao.builder()
 					.id(1L)
 					.date(LocalDate.parse("2023-10-25"))
 					.text("test weather update")
@@ -144,13 +144,13 @@ class DiaryServiceTest {
 		;
 		
 		given(diaryRepository.save(any()))
-			.willReturn(Diary.builder()
+			.willReturn(DiaryDao.builder()
 					.date(LocalDate.parse("2023-10-25"))
 					.text("112 잘 되니?")
 					.build())
 		;
 		
-		ArgumentCaptor<Diary> captor = ArgumentCaptor.forClass(Diary.class);
+		ArgumentCaptor<DiaryDao> captor = ArgumentCaptor.forClass(DiaryDao.class);
 
 		// when
 		diaryService.modifyDiary(LocalDate.parse("2023-10-25"), "112 잘 되니?");

@@ -2,7 +2,7 @@ package com.zerobase.weather.dto;
 
 import java.time.LocalDate;
 
-import com.zerobase.weather.domain.Diary;
+import com.zerobase.weather.domain.DiaryDao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class DiaryDto {
 	private String text;
 	private LocalDate date;
 	
-	public static DiaryDto fromEntity(Diary diary) {
+	public static DiaryDto fromEntity(DiaryDao diary) {
 		return DiaryDto.builder()
 				.id(diary.getId())
 				.weather(diary.getWeather())
