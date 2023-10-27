@@ -50,7 +50,13 @@ public class DiaryService {
 		Diary diary = OpenWeather.getWeatherDateFromApi(region, apiKey);
 		diary.setDate(date);
 		diary.setText(text);
-		
+		return DiaryDto.fromEntity(diaryRepository.save(diary));
+	}
+
+	@Transactional
+	public DiaryDto modifyDiary(LocalDate date, String text) {
+		Diary diary = diaryRepository.findFirstByDate(date);
+		diary.setText(text);
 		return DiaryDto.fromEntity(diaryRepository.save(diary));
 	}
 }

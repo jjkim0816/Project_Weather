@@ -72,7 +72,13 @@ public class DiaryController {
 	}
 	
 	@PutMapping("/update/diary")
-	public void updateDiary() {}
+	public void updateDiary(
+		@RequestParam @DateTimeFormat(iso = ISO.DATE)
+			LocalDate date,
+		@RequestBody String text
+	) {
+		diaryService.modifyDiary(date, text);
+	}
 	
 	@DeleteMapping("/delete/diary")
 	public void deleteDiary() {}
