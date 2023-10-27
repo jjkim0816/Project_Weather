@@ -3,6 +3,7 @@ package com.zerobase.weather.utils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,15 +15,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.zerobase.weather.domain.Diary;
+import com.zerobase.weather.domain.DateWeatherDao;
 
 public class OpenWeather {
-	public static Diary getWeatherDateFromApi(String region, String apiKey) {
+	public static DateWeatherDao getWeatherDateFromApi(String region, String apiKey) {
 		String  weatherData = getWeatherString(region, apiKey);
 		
 		Map<String, Object> parseWeather = parseJsonWeather(weatherData);
 		
-		return Diary.builder()
+		return DateWeatherDao.builder()
+				.date(LocalDate.now())
 				.weather(parseWeather.get("main").toString())
 				.icon(parseWeather.get("icon").toString())
 				.temperature(Double.parseDouble(parseWeather.get("temp").toString()))
@@ -70,7 +72,7 @@ public class OpenWeather {
 	 * @param weatherData
 	 * @return
 	 */
-	public static Map<String, Object> parseJsonWeather(String jsonString) {
+	private static Map<String, Object> parseJsonWeather(String jsonString) {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject;
 		
