@@ -24,7 +24,7 @@
 - [X] 매일 새벽 1시에 날씨 데이터를 외부 API 받아서 DB에 저장
 - [X] logBack을 이용하여 로그 남기기
 - [X] ExceptionHandler 를 이용하여 예외처리
-- [ ] Swagger 를 이용하여 API documentation
+- [X] Swagger 를 이용하여 API documentation
 
 ### 구현 API
 - [X] POST /create/diary
