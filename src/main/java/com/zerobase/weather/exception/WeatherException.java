@@ -12,11 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class WeatherException extends RuntimeException {
-	private ErrorCode errorCode;
-	private String errorMessage;
+	private final ErrorCode errorCode;
+	private final String errorMessage;
 	
 	public WeatherException(ErrorCode errorCode) {
 		this.errorCode = errorCode;
