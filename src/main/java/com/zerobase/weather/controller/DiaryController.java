@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zerobase.weather.dto.GetDiary;
+import com.zerobase.weather.exception.WeatherException;
 import com.zerobase.weather.service.DiaryService;
+import com.zerobase.weather.type.ErrorCode;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -44,6 +46,10 @@ public class DiaryController {
 		@ApiParam(value = "yyyy-MM-dd", example = "2023-10-29")
 			LocalDate date
 	) {
+		if (date.isAfter(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))) {
+			throw new WeatherException(ErrorCode.INVALID_INPUT_DATE_AFTER_YEAR);
+		}
+		
 		return diaryService.findDiary(date)
 				.stream()
 				.map(diaryDto -> GetDiary.builder()
@@ -67,6 +73,10 @@ public class DiaryController {
 		@RequestParam @DateTimeFormat(iso = ISO.DATE)
 			LocalDate endDate
 	) {
+		if (endDate.isBefore(startDate)) {
+			throw new WeatherException(ErrorCode.INVALID_INPUT_END_DATE_BEFORE_START_DATE);
+		}
+		
 		return diaryService.findDiaries(startDate, endDate)
 				.stream()
 				.map(diaryDto -> GetDiary.builder()
