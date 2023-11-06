@@ -9,7 +9,7 @@ import com.zerobase.weather.dto.ErrorResponse;
 import com.zerobase.weather.type.ErrorCode;
 
 @RestControllerAdvice
-public class GlobalException {
+public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.OK)
 	@ExceptionHandler(WeatherException.class)
 	public ErrorResponse handlerWeatherException(WeatherException e) {
@@ -18,7 +18,7 @@ public class GlobalException {
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public ErrorResponse handlerException(Exception e) {
+	public ErrorResponse handlerException() {
 		return new ErrorResponse(
 			ErrorCode.INTERNAL_SERVER_ERROR,
 			ErrorCode.INTERNAL_SERVER_ERROR.getDescription());

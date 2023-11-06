@@ -12,5 +12,5 @@ public enum ErrorCode {
 	INVALID_INPUT_END_DATE_BEFORE_START_DATE("시작날짜는 종료날짜 보다 이후 일 수 없습니댜.")
 	;
 	
-	private String description;
+	private final String description;
 }

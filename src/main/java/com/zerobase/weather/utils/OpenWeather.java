@@ -1,21 +1,20 @@
 package com.zerobase.weather.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-
+import com.zerobase.weather.domain.DateWeatherDao;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.zerobase.weather.domain.DateWeatherDao;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class OpenWeather {
 	public static DateWeatherDao getWeatherDateFromApi(String region, String apiKey) {
@@ -25,7 +24,7 @@ public class OpenWeather {
 		
 		return DateWeatherDao.builder()
 				.date(LocalDate.now())
-				.weather(parseWeather.get("main").toString())
+				.weather(Objects.requireNonNull(parseWeather).get("main").toString())
 				.icon(parseWeather.get("icon").toString())
 				.temperature(Double.parseDouble(parseWeather.get("temp").toString()))
 				.build();
@@ -33,8 +32,6 @@ public class OpenWeather {
 	
 	/**
 	 * Open Weather API를 이용한 데이터 수집 
-	 * @return
-	 * @throws Exception 
 	 */
 	private static String getWeatherString(String region, String apiKey) {
 		String apiUrl =  "https://api.openweathermap.org/data/2.5/weather?q=" + region + "&appid=" + apiKey; 
@@ -46,7 +43,7 @@ public class OpenWeather {
 			connection.setRequestMethod(RequestMethod.GET.toString());
 			
 			int responseCode = connection.getResponseCode();
-			BufferedReader br = null;
+			BufferedReader br;
 			if (responseCode == 200) {
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			} else {
@@ -62,15 +59,12 @@ public class OpenWeather {
 			
 			return sb.toString();
 		} catch(Exception e) {
-			e.printStackTrace();
 			return "failt to get response";
 		}
 	}
 	
 	/**
 	 * Open Weather 데이터 jsonParsing 처리
-	 * @param weatherData
-	 * @return
 	 */
 	private static Map<String, Object> parseJsonWeather(String jsonString) {
 		JSONParser jsonParser = new JSONParser();
@@ -91,9 +85,7 @@ public class OpenWeather {
 
 			return resultMap;
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		
-		return null;
 	}
 }

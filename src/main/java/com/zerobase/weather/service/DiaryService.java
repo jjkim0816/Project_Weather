@@ -1,16 +1,5 @@
 package com.zerobase.weather.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.zerobase.weather.ProjectWeatherApplication;
 import com.zerobase.weather.domain.DateWeatherDao;
 import com.zerobase.weather.domain.DiaryDao;
 import com.zerobase.weather.dto.DiaryDto;
@@ -19,9 +8,17 @@ import com.zerobase.weather.repository.DateWeatherRepository;
 import com.zerobase.weather.repository.DiaryRepository;
 import com.zerobase.weather.type.ErrorCode;
 import com.zerobase.weather.utils.OpenWeather;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Getter
@@ -30,11 +27,11 @@ public class DiaryService {
 	private final DiaryRepository diaryRepository;
 	private final DateWeatherRepository dateWeatherRepository;
 	
-	private String region = "Gwangju";
+	private final String region = "Gwangju";
 	@Value("${openweather.key}")
 	private String apiKey;
 	
-	private Logger logger = Logger.getLogger(ProjectWeatherApplication.class);
+	private final Logger logger = Logger.getLogger(DiaryService.class);
 
 	@Transactional
 	public List<DiaryDto> findDiary(LocalDate date) {
@@ -42,7 +39,7 @@ public class DiaryService {
 
 		List<DiaryDao> diaries = diaryRepository.findAllByDate(date);
 		
-		if (diaries.size() == 0) {
+		if (diaries.isEmpty()) {
 			throw new WeatherException(ErrorCode.WEATHER_DATA_NOT_FOUND);
 		}
 		
@@ -57,7 +54,7 @@ public class DiaryService {
 
 		List <DiaryDao> diaries = diaryRepository.findAllByDateBetween(startDate, endDate);
 		
-		if (diaries.size() == 0) {
+		if (diaries.isEmpty()) {
 			throw new WeatherException(ErrorCode.WEATHER_DATA_NOT_FOUND);
 		}
 
@@ -84,7 +81,7 @@ public class DiaryService {
 	private DateWeatherDao getDateWeather(LocalDate date) {
 		DateWeatherDao dateWeatherDao;
 		List<DateWeatherDao> dateWeathers = dateWeatherRepository.findAllByDate(date);
-		if (dateWeathers.size() > 0) {
+		if (!dateWeathers.isEmpty()) {
 			dateWeatherDao = dateWeathers.get(0);
 		} else {
 			dateWeatherDao = OpenWeather.getWeatherDateFromApi(region, apiKey);
